@@ -57,50 +57,42 @@ def zero(op=None):
     if op:
         return op(0)
     else:
-        return 0
-    
+        return 0  
 def one(op=None): 
     if op:
         return op(1)
     else:
         return 1
-
 def two(op=None): 
     if op:
         return op(2)
     else:
         return 2
-
 def three(op=None):
     if op:
         return op(3)
     else:
         return 3
-
 def four(op=None): 
     if op:
         return op(4)
     else:
         return 4
-
 def five(op=None):
     if op:
         return op(5)
     else:
         return 5
-
 def six(op=None):
     if op:
         return op(6)
     else:
         return 6
-
 def seven(op=None):
     if op:
         return op(7)
     else:
         return 7
-
 def eight(op=None):
     if op:
         return op(8)
@@ -143,3 +135,64 @@ divided_by = lambda x: lambda y: int(y / x)
 # print('eight(divided_by(three()) =', eight(divided_by(three())))
 # print('seven(minus(five()) =', seven(minus(five())))
 ###############################
+
+# Takes in a positive parameter num and returns its multiplicative persistence, 
+# which is the number of times you must multiply the digits in num until you reach a single digit.
+# 39 --> 3 (because 3*9 = 27, 2*7 = 14, 1*4 = 4 and 4 has only one digit)
+# 4 --> 0 (because 4 is already a one-digit number)
+
+# My solution
+def persistence(n):
+    cont = 0
+    if n < 10:
+        return cont
+    else:
+        from functools import reduce
+        new_value = n
+        while new_value > 9:
+            digits = [int(d) for d in str(new_value)]
+            new_value = reduce(lambda x, y: x*y, digits)
+            cont+=1
+    return cont
+
+# solution top
+# import operator
+# from functools import reduce
+# def persistence(n):
+#     cont = 0
+#     while n>=10:
+#         n=reduce(operator.mul,[int(x) for x in str(n)],1)
+#         cont+=1
+#     return cont
+
+# print('persistence(39) =', persistence(39))
+# print('persistence(4) = ', persistence(4))
+#############################################
+
+"""
+Build Tower by the following given argument:
+number of floors (integer and always greater than 0).
+
+3 floors looks like
+[
+  '  *  ', 
+  ' *** ', 
+  '*****'
+]
+"""
+#My solution
+# def n_floor(n, total_floors):
+#     return (total_floors - n) * ' ' + (2*n-1) * '*' + (total_floors - n) * ' '
+
+# def tower_builder(n_floors):
+#     return [n_floor(i, n_floors) for i in range(1, n_floors+1)]
+
+# top solution
+def tower_builder(n):
+    return [("*" * (i*2-1)).center(n*2-1) for i in range(1, n+1)]
+
+# print('tower_builder(3)')
+# [print(f) for f in tower_builder(3)]
+# print('tower_builder(6)')
+# [print(f) for f in tower_builder(6)]
+
