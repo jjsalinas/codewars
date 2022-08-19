@@ -1,26 +1,31 @@
- # codewars.com katas - bits of knowledge obtained - python
- # For the methods in this file we assume the input is always valid
+# codewars.com katas - bits of knowledge obtained - python
+# For the methods in this file we assume the input is always valid
 
 # Narcissistic number: it's value is equal to each figure powered to the number's lenght. For example: 153 = 1**3 + 5**3 + 3**3
-def narcissistic(value: int) -> bool: # Positive integers only
+def narcissistic(value: int) -> bool:  # Positive integers only
     return value == sum(int(x) ** len(str(value)) for x in str(value))
 
-# Capitalize all words in a given (non-empty) string 
+
+# Capitalize all words in a given (non-empty) string
 def toJadenCase(tweet: str) -> str:
-    #return " ".join(w.capitalize() for w in tweet.split())
+    # return " ".join(w.capitalize() for w in tweet.split())
     # ' '.join([w[0].upper()+w[1:] for w in tweet.split(' ')])
 
     # top solution
     import string
-    return string.capwords(tweet) # Nice #top
+
+    return string.capwords(tweet)  # Nice #top
+
 
 # Gives the number of characters (case insensitive) that appear more than once in a string
 def duplicate_count(text: str) -> int:
     # return sum(1 for c in set(text.lower()) if text.lower().count(c) > 1)
-    return len([c for c in set(text.lower()) if text.lower().count(c) > 1]) #top solution
+    return len(
+        [c for c in set(text.lower()) if text.lower().count(c) > 1]
+    )  # top solution
 
 
-# Return a list of items without any elements with the same value next to each other 
+# Return a list of items without any elements with the same value next to each other
 # and preserving the original order of elements
 def unique_in_order(iterable):
     # result = []
@@ -33,7 +38,8 @@ def unique_in_order(iterable):
 
     # top solution
     from itertools import groupby
-    return [k for (k, _) in groupby(iterable)]    
+
+    return [k for (k, _) in groupby(iterable)]
 
 
 ###############################
@@ -136,7 +142,7 @@ divided_by = lambda x: lambda y: int(y / x)
 # print('seven(minus(five()) =', seven(minus(five())))
 ###############################
 
-# Takes in a positive parameter num and returns its multiplicative persistence, 
+# Takes in a positive parameter num and returns its multiplicative persistence,
 # which is the number of times you must multiply the digits in num until you reach a single digit.
 # 39 --> 3 (because 3*9 = 27, 2*7 = 14, 1*4 = 4 and 4 has only one digit)
 # 4 --> 0 (because 4 is already a one-digit number)
@@ -148,12 +154,14 @@ def persistence(n):
         return cont
     else:
         from functools import reduce
+
         new_value = n
         while new_value > 9:
             digits = [int(d) for d in str(new_value)]
-            new_value = reduce(lambda x, y: x*y, digits)
-            cont+=1
+            new_value = reduce(lambda x, y: x * y, digits)
+            cont += 1
     return cont
+
 
 # solution top
 # import operator
@@ -180,7 +188,7 @@ number of floors (integer and always greater than 0).
   '*****'
 ]
 """
-#My solution
+# My solution
 # def n_floor(n, total_floors):
 #     return (total_floors - n) * ' ' + (2*n-1) * '*' + (total_floors - n) * ' '
 
@@ -189,10 +197,100 @@ number of floors (integer and always greater than 0).
 
 # top solution
 def tower_builder(n):
-    return [("*" * (i*2-1)).center(n*2-1) for i in range(1, n+1)]
+    return [("*" * (i * 2 - 1)).center(n * 2 - 1) for i in range(1, n + 1)]
+
 
 # print('tower_builder(3)')
 # [print(f) for f in tower_builder(3)]
 # print('tower_builder(6)')
 # [print(f) for f in tower_builder(6)]
 
+#############################################
+
+
+"""
+Complete the PaginationHelper class, 
+which is a utility class helpful for querying paging information related to an array.
+
+The class is designed to take in an array of values 
+and an integer indicating how many items will be allowed per each page. 
+The types of values contained within the collection/array are not relevant.
+
+The following are some examples of how this class is used:
+
+helper = PaginationHelper(['a','b','c','d','e','f'], 4)
+helper.page_count() # should == 2
+helper.item_count() # should == 6
+helper.page_item_count(0)  # should == 4
+helper.page_item_count(1) # last page - should == 2
+helper.page_item_count(2) # should == -1 since the page is invalid
+
+# page_index takes an item index and returns the page that it belongs on
+helper.page_index(5) # should == 1 (zero based index)
+helper.page_index(2) # should == 0
+helper.page_index(20) # should == -1
+
+"""
+import math
+
+
+class PaginationHelper:
+
+    # The constructor takes in an array of items and a integer indicating
+    # how many items fit within a single page
+    def __init__(self, collection, items_per_page):
+        self.data = collection
+        self.page_size = items_per_page
+
+    # returns the number of items within the entire collection
+    def item_count(self):
+        return len(self.data)
+
+    # returns the number of pages
+    def page_count(self):
+        return math.ceil(len(self.data) / self.page_size)
+
+    # returns the number of items on the current page. page_index is zero based
+    # this method should return -1 for page_index values that are out of range
+    def page_item_count(self, page_index):
+        page_count = self.page_count() - 1  # Minus 1 as page_index is zero based
+        if len(self.data) == 0 or page_index > page_count or page_index < 0:
+            return -1
+        elif page_index == page_count:
+            left_overs = len(self.data) % self.page_size
+            return left_overs if left_overs > 0 else self.page_size
+        else:
+            return self.page_size
+
+    # determines what page an item is on. Zero based indexes.
+    # this method should return -1 for item_index values that are out of range
+    def page_index(self, item_index):
+        if len(self.data) == 0 or item_index > len(self.data) - 1 or item_index < 0:
+            return -1
+        else:
+            page = math.ceil(item_index / self.page_size)
+            # Adjust as page index is zero based
+            return page if item_index % self.page_size == 0 else page - 1
+
+
+###
+# helper = PaginationHelper(["a", "b", "c", "d", "e", "f"], 4)
+# helper = PaginationHelper(range(1, 21), 10)
+# print("page_count", helper.page_count())  # should == 2
+# print("item_count", helper.item_count())  # should == 6
+# print("helper.page_item_count(0)", helper.page_item_count(0))  # should == 4
+# print("helper.page_item_count(1)", helper.page_item_count(1))  # should == 2
+# print("helper.page_item_count(2)", helper.page_item_count(2))  # should == -1
+
+# # page_index takes an item index and returns the page that it belongs on
+# print("helper.page_index(5)", helper.page_index(5))  # should == 1
+# print("helper.page_index(2)", helper.page_index(2))  # should == 0
+# print("helper.page_index(20)", helper.page_index(20))  # should == -1
+# print("helper.page_index(-10)", helper.page_index(-10))  # should == -1
+
+# print("helper.page_index(3)", helper.page_index(3))
+# print("helper.page_index(4)", helper.page_index(4))
+# print("helper.page_index(5)", helper.page_index(5))
+# print("helper.page_index(19)", helper.page_index(19))  # should == -1
+
+#############################################
