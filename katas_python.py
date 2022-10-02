@@ -232,6 +232,7 @@ helper.page_index(20) # should == -1
 
 """
 import math
+from xml.etree.ElementInclude import include
 
 
 class PaginationHelper:
@@ -294,3 +295,232 @@ class PaginationHelper:
 # print("helper.page_index(19)", helper.page_index(19))  # should == -1
 
 #############################################
+
+
+"""
+Create a RomanNumerals class that can convert a roman numeral to and from an integer value. 
+It should follow the API demonstrated in the examples below. 
+Multiple roman numeral values will be tested for each helper method.
+
+Modern Roman numerals are written by expressing each digit separately starting with the 
+left most digit and skipping any digit with a value of zero. 
+In Roman numerals 1990 is rendered: 1000=M, 900=CM, 90=XC; resulting in MCMXC. 
+2008 is written as 2000=MM, 8=VIII; or MMVIII. 1666 uses each Roman symbol in descending order: MDCLXVI.
+
+Input range : 1 <= n < 4000
+
+In this kata 4 should be represented as IV, NOT as IIII (the "watchmaker's four").
+
+RomanNumerals.to_roman(1000) # should return 'M'
+RomanNumerals.from_roman('M') # should return 1000
+I	1
+IV	4
+V	5
+X	10
+L	50
+C	100
+D	500
+M	1000
+
+https://www.codewars.com/kata/51b66044bce5799a7f000003/train/python
+"""
+
+
+class RomanNumerals:
+
+    def to_roman( val):
+        int_as_list = [v for v in str(val)][::-1]
+
+        units = ''
+        unit_val = int(int_as_list[0])
+        if unit_val < 4:
+            units = 'I'*unit_val
+        elif unit_val == 4:
+            units = 'IV'
+        elif unit_val < 9:
+            units = 'V' + 'I'*(unit_val-5)
+        elif unit_val == 9:
+            units = 'IX'
+        else:
+            units = ''
+        
+        decs = ''
+        if len(int_as_list) > 1:
+            dec_val = int(int_as_list[1])
+            if dec_val < 4:
+                decs = 'X'*dec_val
+            elif dec_val == 4:
+                decs = 'XL'
+            elif dec_val < 9:
+                decs = 'L' + 'X'*(dec_val-5)
+            elif dec_val == 9:
+                decs = 'XC'
+            else:
+                decs = ''
+
+        cents = ''
+        if len(int_as_list) > 2:
+            cents_val = int(int_as_list[2])
+            if cents_val < 4:
+                cents = 'C'*cents_val
+            elif cents_val == 4:
+                cents = 'CD'
+            elif cents_val < 9:
+                cents = 'D' + 'C'*(cents_val-5)
+            elif cents_val == 9:
+                cents = 'CM'
+            else:
+                cents = ''
+
+        thousands = ''
+        if len(int_as_list) > 3:
+            thousands_val = int(int_as_list[3])
+            if thousands_val < 4:
+                thousands = 'M'*thousands_val
+            else:
+                thousands = ''
+
+        return thousands + cents + decs + units
+
+    def from_roman(roman_num):
+        simbols = ['I', 'V', 'X', 'L', 'C', 'D', 'M']
+        simbols_values = { 'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000 }
+
+        val_as_list = [i for i in str(roman_num)]
+
+        thousands_count = 0
+        for i in val_as_list:
+            if i == 'M':
+                thousands_count += 1
+            else:
+                break
+        
+        cents_count = 0
+        advance = thousands_count-1 if thousands_count > 0 else 0
+        sub_list = val_as_list[(thousands_count-1 if thousands_count > 0 else 0):]
+        for id, val in enumerate(sub_list):
+            if val == 'C' and id > 0 and sub_list[id-1] == 'X':
+                break
+            elif val == 'C' and id < len(sub_list)-1 and sub_list[id+1] == 'M':
+                cents_count = 9
+                advance += 2
+                break
+            elif val == 'C' and id < len(sub_list)-1 and sub_list[id+1] == 'D':
+                cents_count = 4
+                advance += 2
+                break
+            elif val == 'D':
+                cents_count = 5
+                advance += 1
+            elif val == 'C' and id < len(sub_list)-1 and sub_list[id+1] == 'C':
+                cents_count += 1
+                advance += 1
+            elif val == 'C' and ((id < len(sub_list)-1 and sub_list[id+1] != 'C') or id == len(sub_list)-1):
+                cents_count += 1
+                advance += 1
+                break
+            else:
+                pass
+        
+        decs_count = 0
+        sub_list = val_as_list[(advance-1 if advance > 0 else 0):]
+        for id, val in enumerate(sub_list):
+            if val == 'X' and id > 0 and sub_list[id-1] == 'I':
+                break
+            elif val == 'X' and id < len(sub_list)-1 and sub_list[id+1] == 'C':
+                decs_count = 9
+                advance += 2
+                break
+            elif val == 'X' and id < len(sub_list)-1 and sub_list[id+1] == 'L':
+                decs_count = 4
+                advance += 2
+                break
+            elif val == 'L':
+                decs_count = 5
+                advance += 1
+            elif val == 'X' and id < len(sub_list)-1 and sub_list[id+1] == 'X':
+                decs_count += 1
+                advance += 1
+            elif val == 'X':
+                decs_count += 1
+                advance += 1
+                break
+            else:
+                pass
+
+        units_count = 0
+        sub_list = val_as_list[(advance-1 if advance > 0 else 0):]
+        if 'I' in sub_list or 'V' in sub_list:
+            for id, val in enumerate(sub_list):
+                if val == 'I' and id < len(sub_list)-1 and sub_list[id+1] == 'X' :
+                    units_count = 9
+                    break
+                elif val == 'I' and id < len(sub_list)-1 and sub_list[id+1] == 'V'  :
+                    units_count = 4
+                    break
+                elif val == 'V':
+                    units_count = 5
+                elif val == 'I' and id < len(sub_list)-1 and sub_list[id+1] == 'I' :
+                    units_count += 1
+                elif val == 'I' and id == len(sub_list)-1:
+                    units_count += 1
+                else:
+                    pass
+
+        return thousands_count*1000 + cents_count*100 + decs_count*10 + units_count
+
+
+################
+# top solution
+import string
+from collections import OrderedDict
+
+class RomanNumerals:
+  @classmethod
+  def to_roman(self, num):
+    conversions = OrderedDict([('M',1000), ('CM',900), ('D', 500), ('CD',400), ('C',100), ('XC',90), ('L',50), ('XL',40),
+                               ('X',10), ('IX',9), ('V',5), ('IV',4), ('I',1)])
+    out = ''
+    for key, value in conversions.iteritems():
+      while num >= value:
+        out += key
+        num -= value
+    return out
+  
+  @classmethod
+  def from_roman(self, roman):
+    conversions = OrderedDict([('CM',900), ('CD',400), ('XC',90), ('XL',40), ('IX',9), ('IV',4), ('M',1000), ('D',500),
+                               ('C',100), ('L',50), ('X',10), ('V',5), ('I',1)])
+    out = 0
+    for key, value in conversions.iteritems():
+      out += value * roman.count(key)
+      roman = string.replace(roman, key, "")
+    return out
+
+################################################
+    # print('XXI -->:', from_roman('XXI'))
+    # print('IV -->:', from_roman('IV'))
+    # print('MMVIII -->:', from_roman('MMVIII'))
+    # print('MDCLXVI -->:', from_roman('MDCLXVI'))
+    # print('----------------')
+    # print('2567 -->:', to_roman(2567))
+    # print('734 -->:', to_roman(734))
+    # print('3851 -->:', to_roman(3851))
+    # print('CCCXVII -->:', from_roman('CCCXVII'))
+    # print('DCXIX -->:', from_roman('DCXIX'))
+    # print('XCVIII -->:', from_roman('XCVIII'))
+    # print('MMCCC -->:', from_roman('MMCCC'))
+
+#--------------------------------------------------------#
+#--------------------------------------------------------#
+
+
+
+
+
+
+
+
+
+
+
