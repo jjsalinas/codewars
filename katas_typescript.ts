@@ -61,9 +61,52 @@ function printerError(s: string): string {
 // console.log(printerError('aaabbbbhaijjjm'));
 // console.log(printerError('aaaxbbbbyyhwawiwjjjwwm'));
 /*********************/
+/*
+An isogram is a word that has no repeating letters, consecutive or non-consecutive. 
+Implement a function that determines whether a string that contains only letters is an isogram. 
+Assume the empty string is an isogram. Ignore letter case.
+
+Example: (Input --> Output)
+"Dermatoglyphics" --> true "aba" --> false "moOse" --> false (ignore letter case)
+*/
+
+function isIsogram(str: string): boolean{
+    const lowerCasedParam = str.toLowerCase();
+    return lowerCasedParam.split('').every(char => lowerCasedParam.indexOf(char) === lowerCasedParam.lastIndexOf(char));
+
+    // Top solution
+    // return (new Set(str.toLowerCase())).size === str.length
+}
+
+// console.log(isIsogram('hola'))
+// console.log(isIsogram('holaaaholaa'))
 
 
+/****************************************/
 
+/*
+You are given an array (which will have a length of at least 3, but could be very large) containing integers. 
+The array is either entirely comprised of odd integers or entirely comprised of even integers except for a single integer N. 
+Write a method that takes the array as an argument and returns this "outlier" N.
 
+Examples
+[2, 4, 0, 100, 4, 11, 2602, 36]
+Should return: 11 (the only odd number)
+
+[160, 3, 1719, 19, 11, 13, -21]
+Should return: 160 (the only even number)
+*/
+
+export function findOutlier(integers: number[]): number {
+  const mod0 = integers.filter(n => Math.abs(n % 2) === 0);
+  const mod1 = integers.filter(n => Math.abs(n % 2) === 1);
+  return mod0.length === 1 ? mod0[0]: mod1[0]
+  // return res;
+}
+// console.log(findOutlier([2, 4, 0, 100, 4, 11, 2602, 36]))
+// console.log(findOutlier([160, 3, 1719, 19, 11, 13, -21]))
+// console.log(findOutlier([-79969418,27012428,-24511592,20201370,14913486,-146145910,156991450,165468560,-34003430,-16979696,125590506,-123161908,-2511186,-87639998,23893582,29594342,105273480,-173105944,-24591226,-124726280,146605998,-139514028,162809614,188411438,-42920520,-183301326,-50582017,98154018,12277766,91856362,-1483618,110451128,-39675624,-179795138,-178038722,191892004,97358254,-56760722,12548372,-185148580,-94077456,133763630,114547938,135036936,-127577440,156357294,-98743938,-167286650,-33305348]))
+
+/******************************************************************/
 
 
