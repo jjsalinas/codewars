@@ -383,8 +383,8 @@ class RomanNumerals:
         return thousands + cents + decs + units
 
     def from_roman(roman_num):
-        simbols = ['I', 'V', 'X', 'L', 'C', 'D', 'M']
-        simbols_values = { 'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000 }
+        # simbols = ['I', 'V', 'X', 'L', 'C', 'D', 'M']
+        # simbols_values = { 'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000 }
 
         val_as_list = [i for i in str(roman_num)]
 
@@ -514,12 +514,82 @@ class RomanNumerals:
 #--------------------------------------------------------#
 #--------------------------------------------------------#
 
+"""
+In this kata you have to create all permutations of a non empty input string and remove duplicates, if present. This means, you have to shuffle all letters from the input in all possible orders.
+
+Examples:
+
+* With input 'a'
+* Your function should return: ['a']
+* With input 'ab'
+* Your function should return ['ab', 'ba']
+* With input 'aabb'
+* Your function should return ['aabb', 'abab', 'abba', 'baab', 'baba', 'bbaa']
+
+"""
+from itertools import permutations as iter_permutations
+def permutations(s):
+    if len(s) == 1:
+        return [s]
+    else:
+        return list(set([''.join(p) for p in iter_permutations(s)]))
 
 
+# print(permutations('a')) # [a]
+# print(permutations('ab')) # [ab], [ba]
+# print(permutations('aabb')) # ['aabb', 'abab', 'abba', 'baab', 'baba', 'bbaa']
+
+#--------------------------------------------------------#
+#--------------------------------------------------------#
+
+"""
+write a function that returns the positions and the values of the "peaks" (or local maxima) of a numeric array.
+
+For example, the array arr = [0, 1, 2, 5, 1, 0] has a peak at position 3 with a value of 5 (since arr[3] equals 5).
+
+The output will be returned as an object with two properties: pos and peaks. Both of these properties should be arrays. 
+If there is no peak in the given array, then the output should be {pos: [], peaks: []}.
+
+Example: pickPeaks([3, 2, 3, 6, 4, 1, 2, 3, 2, 1, 2, 3]) should return {pos: [3, 7], peaks: [6, 3]} (or equivalent in other languages)
+
+All input arrays will be valid integer arrays (although it could still be empty), so you won't need to validate the input.
+
+The first and last elements of the array will not be considered as peaks 
+(in the context of a mathematical function, we don't know what is after and before and therefore, we don't know if it is a peak or not).
+
+Also, beware of plateaus !!! [1, 2, 2, 2, 1] has a peak while [1, 2, 2, 2, 3] and [1, 2, 2, 2, 2] do not. 
+In case of a plateau-peak, please only return the position and value of the beginning of the plateau. 
+
+For example: pickPeaks([1, 2, 2, 2, 1]) returns {pos: [1], peaks: [2]} (or equivalent in other languages)
+"""
+
+def pick_peaks(arr):
+    result = {'pos': [], 'peaks': []}
+    if len(arr) == 0:
+        return result
+
+    local_max = (2, arr[2])
+    for id, val in enumerate(arr):
+        if id > 0 and id < len(arr) - 1:
+            if arr[id-1] < val and arr[id+1] < val:
+                result['pos'].append(id)
+                result['peaks'].append(val)
+            
+            if arr[id-1] < val and arr[id+1] <= val:
+                local_max = (id, val)
+
+            if arr[id-1] == val and arr[id+1] < val and local_max[1] == val:
+                result['pos'].append(local_max[0])
+                result['peaks'].append(local_max[1])
+    return result
 
 
+# print(pick_peaks([3, 2, 3, 6, 4, 1, 2, 3, 2, 1, 2, 3])) # {pos: [3, 7], peaks: [6, 3]}
+# print(pick_peaks([3,2,3,6,4,1,2,3,2,1,2,2,2,1]), {"pos":[3,7,10], "peaks":[6,3,2]})
+# print(pick_peaks([2,1,3,1,2,2,2,2,1]), {"pos":[2,4], "peaks":[3,2]})
 
-
+#--------------------------------------------------------#
+#--------------------------------------------------------#
 
 
 
