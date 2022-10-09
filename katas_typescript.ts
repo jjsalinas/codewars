@@ -4,8 +4,8 @@
 // For example, the string "This website is for losers LOL!" would become "Ths wbst s fr lsrs LL!".
 // Note: for this kata y isn't considered a vowel.
 function disemvowel(str: string): string {
-    return str.replace(/[aeiouA]/gi, '');
-  }
+  return str.replace(/[aeiouA]/gi, '');
+}
 
 /**********************/
 //   Your task is to sort a given string. Each word in the string will contain a single number. This number is the position the word should have in the result.
@@ -15,15 +15,15 @@ function disemvowel(str: string): string {
 // "4of Fo1r pe6ople g3ood th5e the2"  -->  "Fo1r the2 g3ood 4of th5e pe6ople"
 
 // My solution
-function order(words:string): string {
-    const singleWords = words.split(' ');
-    const pairs: {[numVal: number]: string} = {};
-    for(const w of singleWords){
-        const v = w.replace(/[a-z]/gi, '');
-        pairs[Number(v)] = w;
-    }
-    return Object.values(pairs).join(' ');
+function order(words: string): string {
+  const singleWords = words.split(' ');
+  const pairs: { [numVal: number]: string } = {};
+  for (const w of singleWords) {
+    const v = w.replace(/[a-z]/gi, '');
+    pairs[Number(v)] = w;
   }
+  return Object.values(pairs).join(' ');
+}
 // console.log(order('is2 Thi1s T4est 3a'));
 // console.log(order('4of Fo1r pe6ople g3ood th5e the2'));
 
@@ -55,7 +55,7 @@ printer_error(s) => "8/22"
 */
 
 function printerError(s: string): string {
-    return `${s.replace(/[a-m]/gi, '').length}/${s.length}`;
+  return `${s.replace(/[a-m]/gi, '').length}/${s.length}`;
 }
 
 // console.log(printerError('aaabbbbhaijjjm'));
@@ -70,12 +70,12 @@ Example: (Input --> Output)
 "Dermatoglyphics" --> true "aba" --> false "moOse" --> false (ignore letter case)
 */
 
-function isIsogram(str: string): boolean{
-    const lowerCasedParam = str.toLowerCase();
-    return lowerCasedParam.split('').every(char => lowerCasedParam.indexOf(char) === lowerCasedParam.lastIndexOf(char));
+function isIsogram(str: string): boolean {
+  const lowerCasedParam = str.toLowerCase();
+  return lowerCasedParam.split('').every(char => lowerCasedParam.indexOf(char) === lowerCasedParam.lastIndexOf(char));
 
-    // Top solution
-    // return (new Set(str.toLowerCase())).size === str.length
+  // Top solution
+  // return (new Set(str.toLowerCase())).size === str.length
 }
 
 // console.log(isIsogram('hola'))
@@ -100,7 +100,7 @@ Should return: 160 (the only even number)
 export function findOutlier(integers: number[]): number {
   const mod0 = integers.filter(n => Math.abs(n % 2) === 0);
   const mod1 = integers.filter(n => Math.abs(n % 2) === 1);
-  return mod0.length === 1 ? mod0[0]: mod1[0]
+  return mod0.length === 1 ? mod0[0] : mod1[0]
   // return res;
 }
 // console.log(findOutlier([2, 4, 0, 100, 4, 11, 2602, 36]))
@@ -109,4 +109,113 @@ export function findOutlier(integers: number[]): number {
 
 /******************************************************************/
 
+/*
+Some numbers have funny properties. For example:
+
+89 --> 8¹ + 9² = 89 * 1
+
+695 --> 6² + 9³ + 5⁴= 1390 = 695 * 2
+
+46288 --> 4³ + 6⁴+ 2⁵ + 8⁶ + 8⁷ = 2360688 = 46288 * 51
+
+Given a positive integer n written as abcd... (a, b, c, d... being digits) and a positive integer p
+
+we want to find a positive integer k, if it exists, 
+such that the sum of the digits of n taken to the successive powers of p is equal to k * n.
+In other words:
+
+Is there an integer k such as : (a ^ p + b ^ (p+1) + c ^(p+2) + d ^ (p+3) + ...) = n * k
+If it is the case we will return k, if not return -1.
+
+Note: n and p will always be given as strictly positive integers.
+*/
+
+export class G964 {
+
+  public static digPow = (n: number, p: number) => {
+    let found = false;
+    const digits = Array.from(n.toString(), Number);
+    let poweredVal = 0;
+    digits.forEach((val, index) => { poweredVal += Math.pow(val, p + index) });
+
+    let k = 1;
+    let currentVal = n;
+    while (currentVal <= poweredVal) {
+      currentVal = n * k;
+      if (currentVal === poweredVal) {
+        found = true;
+        break;
+      } else {
+        k += 1;
+      }
+    }
+
+    return found ? k : -1;
+  }
+
+  // Top solution
+  // public static digPow = (n, p) => {
+  //   var x = n.toString().split("").reduce((s, d, i) => s + Math.pow(d, p + i), 0)
+  //   return x % n ? -1 : x / n;
+  // }
+
+}
+
+// console.log(G964.digPow(89, 1)) // should return 1 since 8¹ + 9² = 89 = 89 * 1
+// console.log(G964.digPow(92, 1)) // should return -1 since there is no k such as 9¹ + 2² equals 92 * k
+// console.log(G964.digPow(695, 2)) // should return 2 since 6² + 9³ + 5⁴= 1390 = 695 * 2
+// console.log(G964.digPow(46288, 3)) // should return 51 since 4³ + 6⁴+ 2⁵ + 8⁶ + 8⁷ = 2360688 = 46288 * 51
+
+/****************************************/
+
+/* 
+In a small town the population is p0 = 1000 at the beginning of a year. 
+The population regularly increases by 2 percent per year and moreover 50 new inhabitants per year come to live in the town. 
+How many years does the town need to see its population greater or equal to p = 1200 inhabitants?
+
+At the end of the first year there will be: 
+1000 + 1000 * 0.02 + 50 => 1070 inhabitants
+
+At the end of the 2nd year there will be: 
+1070 + 1070 * 0.02 + 50 => 1141 inhabitants (** number of inhabitants is an integer **)
+
+At the end of the 3rd year there will be:
+1141 + 1141 * 0.02 + 50 => 1213
+
+It will need 3 entire years.
+More generally given parameters:
+
+p0, percent, aug (inhabitants coming or leaving each year), p (population to equal or surpass)
+the function nb_year should return n number of entire years needed to get a population greater or equal to p.
+aug is an integer, percent a positive or null floating number, p0 and p are positive integers (> 0)
+
+Examples:
+nb_year(1500, 5, 100, 5000) -> 15
+nb_year(1500000, 2.5, 10000, 2000000) -> 10
+Note:
+Don't forget to convert the percent parameter as a percentage in the body of your function: 
+if the parameter percent is 2 you have to convert it to 0.02.
+*/
+
+export const nbYear = (p0: number, percent: number, aug: number, p: number): number => {
+  let currentVal = p0;
+  const percentVal = percent / 100;
+
+  let years = 0;
+  while (currentVal <= p) {
+    currentVal += (Math.trunc(currentVal * percentVal) + aug)
+    years += 1;
+    if (currentVal >= p) {
+      break;
+    }
+  }
+
+  return years;
+}
+
+// console.log(nbYear(1000, 2, 50, 1200)) // -> 3
+// console.log(nbYear(1500, 5, 100, 5000)) // -> 15
+// console.log(nbYear(1500000, 2.5, 10000, 2000000)) // -> 10
+
+/****************************************/
 
