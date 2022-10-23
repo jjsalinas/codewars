@@ -253,3 +253,128 @@ export const likes = (a : string[]) : string => {
 // console.log(likes(["Alex", "Jacob", "Mark", "Max"])) // "Alex, Jacob and 2 others like this"
 
 /****************************************/
+
+/*
+Street Fighter 2 - Character Selection
+
+Selection Grid Layout in text:
+
+| Ryu  | E.Honda | Blanka  | Guile   | Balrog | Vega    |
+| Ken  | Chun Li | Zangief | Dhalsim | Sagat  | M.Bison |
+
+Input
+
+the list of game characters in a 2x6 grid;
+the initial position of the selection cursor (top-left is (0,0));
+a list of moves of the selection cursor (which are up, down, left, right);
+Output
+
+the list of characters who have been hovered by the selection cursor after all the moves 
+(ordered and with repetition, all the ones after a move, whether successful or not, see tests);
+
+Selection cursor is circular horizontally but not vertically!
+
+Example
+fighters = [
+  ["Ryu", "E.Honda", "Blanka", "Guile", "Balrog", "Vega"],
+  ["Ken", "Chun Li", "Zangief", "Dhalsim", "Sagat", "M.Bison"]
+]
+initial_position = (0,0)
+moves = ['up', 'left', 'right', 'left', 'left']
+then I should get:
+
+['Ryu', 'Vega', 'Ryu', 'Vega', 'Balrog']
+
+*/
+type Move = 'down' | 'up' | 'right' | 'left'
+
+export function streetFighterSelection(fighters: string[][], position: number[], moves: Move[]) {
+  const currentPosition = position;
+  const result: string[] = [];
+
+  moves.forEach((newMove: Move) => {
+    switch (newMove) {
+      case 'up':
+        currentPosition[0] !== 0 ? currentPosition[0] -= 1 : currentPosition[0] = 0;
+        break;
+      case 'down':
+        currentPosition[0] !== fighters.length - 1 ? currentPosition[0] += 1 : currentPosition[0];
+        break;
+      case 'left':
+        currentPosition[1] -= 1;
+        if (currentPosition[1] < 0) {
+          currentPosition[1] = fighters[1].length - 1;
+        }
+        break;
+      case 'right':
+        currentPosition[1] = ((currentPosition[1] + 1) % fighters[0].length)
+        break;
+      default:
+        break;
+    }
+    result.push(fighters[currentPosition[0]][currentPosition[1]]);
+  });
+  return result;
+}
+
+// const fighters: string[][] = [
+//   ["Ryu", "E.Honda", "Blanka", "Guile", "Balrog", "Vega"],
+//   ["Ken", "Chun Li", "Zangief", "Dhalsim", "Sagat", "M.Bison"]
+// ];
+// let initialPosition = [0, 0]
+// let moves = ['up', 'left', 'right', 'left', 'left'] as Move[]
+
+// console.log(streetFighterSelection(fighters, initialPosition, moves), '| expected: ', ['Ryu', 'Vega', 'Ryu', 'Vega', 'Balrog'])
+// moves = ["up","left","down","right","up","left","down","right"];
+// console.log(streetFighterSelection(fighters, [0,0], moves), '| expected:',['Ryu', 'Vega', 'M.Bison', 'Ken', 'Ryu', 'Vega', 'M.Bison', 'Ken']);
+
+// Solution using reduce
+/*
+export function streetFighterSelection(fighters: Array<string[]>, position: number[], moves: string[]) {
+  const highlights: string[] = []
+  
+  moves.reduce(([y, x], move) => {
+    switch (move) {
+      case 'up': y = Math.max(0, y - 1); break
+      case 'down': y = Math.min(fighters.length - 1, y + 1); break
+      case 'left': x = x == 0 ? fighters[y].length - 1 : x - 1; break
+      case 'right': x = x == fighters[y].length - 1 ? 0 : x + 1; break
+    }
+    highlights.push(fighters[y][x])
+    return [y, x]
+  }, position);
+  
+  return highlights
+}
+*/
+
+
+/****************************************/
+/*
+Write a function, which takes a non-negative integer (seconds) as input and returns the time in a human-readable format (HH:MM:SS)
+
+HH = hours, padded to 2 digits, range: 00 - 99
+MM = minutes, padded to 2 digits, range: 00 - 59
+SS = seconds, padded to 2 digits, range: 00 - 59
+The maximum time never exceeds 359999 (99:59:59)
+
+ */
+
+export function humanReadable(seconds:number):string {
+  if (seconds >= 359999) {
+    return '99:59:59';
+  }
+  let s = seconds % 60;
+  let m = Math.round(seconds/60);
+  let h = Math.round(seconds/3600);
+  
+  return `${h > 10 ? h:'0'+h}:${m > 10 ? m:'0'+m}:${s > 10 ? s:'0'+s}`;
+}
+
+
+
+console.log(humanReadable(0), '00:00:00');
+console.log(humanReadable(5), '00:00:05');
+console.log(humanReadable(60), '00:01:00');
+console.log(humanReadable(86399), '23:59:59');
+console.log(humanReadable(359999), '99:59:59');
