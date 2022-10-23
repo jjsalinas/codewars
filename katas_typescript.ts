@@ -360,21 +360,18 @@ The maximum time never exceeds 359999 (99:59:59)
 
  */
 
-export function humanReadable(seconds:number):string {
-  if (seconds >= 359999) {
-    return '99:59:59';
-  }
-  let s = seconds % 60;
-  let m = Math.round(seconds/60);
-  let h = Math.round(seconds/3600);
-  
-  return `${h > 10 ? h:'0'+h}:${m > 10 ? m:'0'+m}:${s > 10 ? s:'0'+s}`;
+export function humanReadable(seconds: number): string {
+  const s = seconds % 60;
+  const m = Math.floor(seconds / 60) % 60;
+  const h = Math.floor(seconds / 3600);
+
+  return `${h >= 10 ? h : '0' + h}:${m >= 10 ? m : '0' + m}:${s >= 10 ? s : '0' + s}`;
 }
-
-
 
 console.log(humanReadable(0), '00:00:00');
 console.log(humanReadable(5), '00:00:05');
 console.log(humanReadable(60), '00:01:00');
 console.log(humanReadable(86399), '23:59:59');
 console.log(humanReadable(359999), '99:59:59');
+
+/****************************************/
