@@ -368,10 +368,69 @@ export function humanReadable(seconds: number): string {
   return `${h >= 10 ? h : '0' + h}:${m >= 10 ? m : '0' + m}:${s >= 10 ? s : '0' + s}`;
 }
 
-console.log(humanReadable(0), '00:00:00');
-console.log(humanReadable(5), '00:00:05');
-console.log(humanReadable(60), '00:01:00');
-console.log(humanReadable(86399), '23:59:59');
-console.log(humanReadable(359999), '99:59:59');
+// console.log(humanReadable(0), '00:00:00');
+// console.log(humanReadable(5), '00:00:05');
+// console.log(humanReadable(60), '00:01:00');
+// console.log(humanReadable(86399), '23:59:59');
+// console.log(humanReadable(359999), '99:59:59');
 
 /****************************************/
+
+/*
+Given two arrays a and b write a function comp(a, b) (orcompSame(a, b)) that checks whether the two arrays have the "same" elements, 
+with the same multiplicities (the multiplicity of a member is the number of times it appears). 
+"Same" means, here, that the elements in b are the elements in a squared, regardless of the order.
+
+Examples
+Valid arrays
+a = [121, 144, 19, 161, 19, 144, 19, 11]  
+b = [121, 14641, 20736, 361, 25921, 361, 20736, 361]
+comp(a, b) returns true because in b 121 is the square of 11, 14641 is the square of 121, 
+20736 the square of 144, 361 the square of 19, 25921 the square of 161, and so on. 
+It gets obvious if we write b's elements in terms of squares:
+
+a = [121, 144, 19, 161, 19, 144, 19, 11] 
+b = [11*11, 121*121, 144*144, 19*19, 161*161, 19*19, 144*144, 19*19]
+Invalid arrays
+If, for example, we change the first number to something else, comp is not returning true anymore:
+
+a = [121, 144, 19, 161, 19, 144, 19, 11]  
+b = [132, 14641, 20736, 361, 25921, 361, 20736, 361]
+*/
+
+export function comp(a1: number[] | null, a2: number[] | null): boolean {
+  if ((!a1 || !a2) || a1.length !== a2.length) {
+    return false;
+  }
+
+  const check = a2.map((sqNum: number) => {
+    return a1.some((num: number) => {
+      return sqNum === num * num
+        && a1.filter(a1Value => a1Value === num).length === a2.filter(a2Value => a2Value === sqNum).length
+    });
+  })
+
+  return check.every((boolCheck: Boolean) => boolCheck === true);
+}
+
+// TOP solution
+/*
+export function comp(a1: number[] | null, a2: number[] | null): boolean {
+   if (!(a1 && a2) || a1.length !== a2.length) return false;
+   return a1.map(x => x * x).sort().toString() === a2.sort().toString();
+}
+*/
+
+// let a = [121, 144, 19, 161, 19, 144, 19, 11];
+// let b = [11*11, 121*121, 144*144, 19*19, 161*161, 19*19, 144*144, 19*19];
+// console.log(comp(a, b)); // expected true
+
+// // a = [123456789, 144, 19, 161, 19, 144, 19, 11];
+// // a = [121,144,19,161,19,144,19,11]
+// a = [2, 2, 3]
+// // b = [11*11, 121*121, 144*144, 19*19, 161*161, 19*19, 144*144, 19*19];
+// // b = [121,14641,20736,36100,25921,361,20736,361]
+// b = [4, 9, 9]
+// console.log(comp(a, b)); // expected false
+
+
