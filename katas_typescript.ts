@@ -232,8 +232,8 @@ Implement the function which takes an array containing the names of people that 
 Note: For 4 or more names, the number in "and 2 others" simply increases.
 */
 
-export const likes = (a : string[]) : string => {
-  if (a.length === 0){
+export const likes = (a: string[]): string => {
+  if (a.length === 0) {
     return "no one likes this";
   } else if (a.length === 1) {
     return `${a[0]} likes this`;
@@ -448,8 +448,8 @@ The following are examples of expected output values:
 */
 
 export function rgb(r: number, g: number, b: number): string {
-  const rgbSanitazed = [r, g, b].map(v =>  v < 0 ? v = 0 : v).map(v => v > 255 ? v = 255 : v);
-  return rgbSanitazed.map(v =>  v.toString(16)).map(vs => Number(vs) < 10  ? '0'+vs : vs).join('').toUpperCase();  
+  const rgbSanitazed = [r, g, b].map(v => v < 0 ? v = 0 : v).map(v => v > 255 ? v = 255 : v);
+  return rgbSanitazed.map(v => v.toString(16)).map(vs => Number(vs) < 10 ? '0' + vs : vs).join('').toUpperCase();
 }
 
 // console.log('rgb(255, 255, 255)', rgb(255, 255, 255)) // returns FFFFFF
