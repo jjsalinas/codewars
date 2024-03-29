@@ -457,5 +457,42 @@ export function rgb(r: number, g: number, b: number): string {
 // console.log('rgb(148, 0, 211)', rgb(148, 0, 211)) // returns 9400D3
 
 /****************************************/
+/**
+ * According to Wikipedia, ROT13 is frequently used to obfuscate jokes on USENET.
+ * For this task you're only supposed to substitute characters. 
+ * Not spaces, punctuation, numbers, etc.
+ * http://en.wikipedia.org/wiki/ROT13
+ * 
+ * "EBG13 rknzcyr." -> "ROT13 example."
+ * "This is my first ROT13 excercise!" -> "Guvf vf zl svefg EBG13 rkprepvfr!"
+ * 
+ */
+
+function rot13(input: string): string {
+  const alphabetRegex = /[a-z]/i;
+  const inputArray = Array.from(input);
+  const alphabet = Array.from({ length: 26 }, (_, i) => String.fromCharCode(97 + i));
+
+  inputArray.forEach((letter: string, index: number) => {
+    if (alphabetRegex.test(letter)) {
+      const letterIndex = alphabet.indexOf(letter.toLocaleLowerCase());
+      const rotatedLetter = alphabet[(letterIndex+13) % 26]
+      inputArray.splice(index, 1, letter === letter.toUpperCase() ? rotatedLetter.toUpperCase() : rotatedLetter)
+    }
+  })
+  return inputArray.join('');
+}
 
 
+// console.log(rot13('Esto es una prueba'))
+// console.log(rot13('Rfgb rf han cehron'))
+
+// TOP Solution
+/*
+export function rot13(str: string): string {
+  return str.replace(/[a-z]/gi, l => String.fromCharCode(l.charCodeAt(0) + (l.toLowerCase() <= 'm' ? 13 : -13)));
+}
+*/
+
+
+/****************************************/
