@@ -4,7 +4,7 @@
 // For example, the string "This website is for losers LOL!" would become "Ths wbst s fr lsrs LL!".
 // Note: for this kata y isn't considered a vowel.
 function disemvowel(str: string): string {
-  return str.replace(/[aeiouA]/gi, '');
+  return str.replace(/[aeiouA]/gi, "");
 }
 
 /**********************/
@@ -16,13 +16,13 @@ function disemvowel(str: string): string {
 
 // My solution
 function order(words: string): string {
-  const singleWords = words.split(' ');
+  const singleWords = words.split(" ");
   const pairs: { [numVal: number]: string } = {};
   for (const w of singleWords) {
-    const v = w.replace(/[a-z]/gi, '');
+    const v = w.replace(/[a-z]/gi, "");
     pairs[Number(v)] = w;
   }
-  return Object.values(pairs).join(' ');
+  return Object.values(pairs).join(" ");
 }
 // console.log(order('is2 Thi1s T4est 3a'));
 // console.log(order('4of Fo1r pe6ople g3ood th5e the2'));
@@ -35,15 +35,15 @@ function order(words: string): string {
 //   }
 
 /**************************/
-// In a factory a printer prints labels for boxes. 
+// In a factory a printer prints labels for boxes.
 // For one kind of boxes the printer has to use colors which, for the sake of simplicity, are named with letters from a to m.
-// The colors used by the printer are recorded in a control string. 
-// For example a "good" control string would be aaabbbbhaijjjm meaning that the printer used three times color a, 
+// The colors used by the printer are recorded in a control string.
+// For example a "good" control string would be aaabbbbhaijjjm meaning that the printer used three times color a,
 // four times color b, one time color h then one time color a...
-// Sometimes there are problems: lack of colors, technical malfunction and a "bad" control string is produced 
+// Sometimes there are problems: lack of colors, technical malfunction and a "bad" control string is produced
 // e.g. aaaxbbbbyyhwawiwjjjwwm with letters not from a to m.
-// You have to write a function printer_error which given a string will return the error rate of the printer 
-// as a string representing a rational whose numerator is the number of errors and the denominator the length of the control string. 
+// You have to write a function printer_error which given a string will return the error rate of the printer
+// as a string representing a rational whose numerator is the number of errors and the denominator the length of the control string.
 // Don't reduce this fraction to a simpler expression.
 // The string has a length greater or equal to one and contains only letters from ato z.
 /*
@@ -55,7 +55,7 @@ printer_error(s) => "8/22"
 */
 
 function printerError(s: string): string {
-  return `${s.replace(/[a-m]/gi, '').length}/${s.length}`;
+  return `${s.replace(/[a-m]/gi, "").length}/${s.length}`;
 }
 
 // console.log(printerError('aaabbbbhaijjjm'));
@@ -72,7 +72,12 @@ Example: (Input --> Output)
 
 function isIsogram(str: string): boolean {
   const lowerCasedParam = str.toLowerCase();
-  return lowerCasedParam.split('').every(char => lowerCasedParam.indexOf(char) === lowerCasedParam.lastIndexOf(char));
+  return lowerCasedParam
+    .split("")
+    .every(
+      (char) =>
+        lowerCasedParam.indexOf(char) === lowerCasedParam.lastIndexOf(char),
+    );
 
   // Top solution
   // return (new Set(str.toLowerCase())).size === str.length
@@ -80,7 +85,6 @@ function isIsogram(str: string): boolean {
 
 // console.log(isIsogram('hola'))
 // console.log(isIsogram('holaaaholaa'))
-
 
 /****************************************/
 
@@ -98,9 +102,9 @@ Should return: 160 (the only even number)
 */
 
 export function findOutlier(integers: number[]): number {
-  const mod0 = integers.filter(n => Math.abs(n % 2) === 0);
-  const mod1 = integers.filter(n => Math.abs(n % 2) === 1);
-  return mod0.length === 1 ? mod0[0] : mod1[0]
+  const mod0 = integers.filter((n) => Math.abs(n % 2) === 0);
+  const mod1 = integers.filter((n) => Math.abs(n % 2) === 1);
+  return mod0.length === 1 ? mod0[0] : mod1[0];
   // return res;
 }
 // console.log(findOutlier([2, 4, 0, 100, 4, 11, 2602, 36]))
@@ -131,12 +135,13 @@ Note: n and p will always be given as strictly positive integers.
 */
 
 export class G964 {
-
   public static digPow = (n: number, p: number) => {
     let found = false;
     const digits = Array.from(n.toString(), Number);
     let poweredVal = 0;
-    digits.forEach((val, index) => { poweredVal += Math.pow(val, p + index) });
+    digits.forEach((val, index) => {
+      poweredVal += Math.pow(val, p + index);
+    });
 
     let k = 1;
     let currentVal = n;
@@ -151,14 +156,13 @@ export class G964 {
     }
 
     return found ? k : -1;
-  }
+  };
 
   // Top solution
   // public static digPow = (n, p) => {
   //   var x = n.toString().split("").reduce((s, d, i) => s + Math.pow(d, p + i), 0)
   //   return x % n ? -1 : x / n;
   // }
-
 }
 
 // console.log(G964.digPow(89, 1)) // should return 1 since 8¹ + 9² = 89 = 89 * 1
@@ -197,13 +201,18 @@ Don't forget to convert the percent parameter as a percentage in the body of you
 if the parameter percent is 2 you have to convert it to 0.02.
 */
 
-export const nbYear = (p0: number, percent: number, aug: number, p: number): number => {
+export const nbYear = (
+  p0: number,
+  percent: number,
+  aug: number,
+  p: number,
+): number => {
   let currentVal = p0;
   const percentVal = percent / 100;
 
   let years = 0;
   while (currentVal <= p) {
-    currentVal += (Math.trunc(currentVal * percentVal) + aug)
+    currentVal += Math.trunc(currentVal * percentVal) + aug;
     years += 1;
     if (currentVal >= p) {
       break;
@@ -211,7 +220,7 @@ export const nbYear = (p0: number, percent: number, aug: number, p: number): num
   }
 
   return years;
-}
+};
 
 // console.log(nbYear(1000, 2, 50, 1200)) // -> 3
 // console.log(nbYear(1500, 5, 100, 5000)) // -> 15
@@ -244,7 +253,7 @@ export const likes = (a: string[]): string => {
   } else {
     return `${a[0]}, ${a[1]} and ${a.length - 2} others like this`;
   }
-}
+};
 
 // console.log(likes([])) // "no one likes this"
 // console.log(likes(["Peter"])) // "Peter likes this"
@@ -286,28 +295,36 @@ then I should get:
 ['Ryu', 'Vega', 'Ryu', 'Vega', 'Balrog']
 
 */
-type Move = 'down' | 'up' | 'right' | 'left'
+type Move = "down" | "up" | "right" | "left";
 
-export function streetFighterSelection(fighters: string[][], position: number[], moves: Move[]) {
+export function streetFighterSelection(
+  fighters: string[][],
+  position: number[],
+  moves: Move[],
+) {
   const currentPosition = position;
   const result: string[] = [];
 
   moves.forEach((newMove: Move) => {
     switch (newMove) {
-      case 'up':
-        currentPosition[0] !== 0 ? currentPosition[0] -= 1 : currentPosition[0] = 0;
+      case "up":
+        currentPosition[0] !== 0
+          ? (currentPosition[0] -= 1)
+          : (currentPosition[0] = 0);
         break;
-      case 'down':
-        currentPosition[0] !== fighters.length - 1 ? currentPosition[0] += 1 : currentPosition[0];
+      case "down":
+        currentPosition[0] !== fighters.length - 1
+          ? (currentPosition[0] += 1)
+          : currentPosition[0];
         break;
-      case 'left':
+      case "left":
         currentPosition[1] -= 1;
         if (currentPosition[1] < 0) {
           currentPosition[1] = fighters[1].length - 1;
         }
         break;
-      case 'right':
-        currentPosition[1] = ((currentPosition[1] + 1) % fighters[0].length)
+      case "right":
+        currentPosition[1] = (currentPosition[1] + 1) % fighters[0].length;
         break;
       default:
         break;
@@ -348,7 +365,6 @@ export function streetFighterSelection(fighters: Array<string[]>, position: numb
 }
 */
 
-
 /****************************************/
 /*
 Write a function, which takes a non-negative integer (seconds) as input and returns the time in a human-readable format (HH:MM:SS)
@@ -365,7 +381,7 @@ export function humanReadable(seconds: number): string {
   const m = Math.floor(seconds / 60) % 60;
   const h = Math.floor(seconds / 3600);
 
-  return `${h >= 10 ? h : '0' + h}:${m >= 10 ? m : '0' + m}:${s >= 10 ? s : '0' + s}`;
+  return `${h >= 10 ? h : "0" + h}:${m >= 10 ? m : "0" + m}:${s >= 10 ? s : "0" + s}`;
 }
 
 // console.log(humanReadable(0), '00:00:00');
@@ -399,16 +415,19 @@ b = [132, 14641, 20736, 361, 25921, 361, 20736, 361]
 */
 
 export function comp(a1: number[] | null, a2: number[] | null): boolean {
-  if ((!a1 || !a2) || a1.length !== a2.length) {
+  if (!a1 || !a2 || a1.length !== a2.length) {
     return false;
   }
 
   const check = a2.map((sqNum: number) => {
     return a1.some((num: number) => {
-      return sqNum === num * num
-        && a1.filter(a1Value => a1Value === num).length === a2.filter(a2Value => a2Value === sqNum).length
+      return (
+        sqNum === num * num &&
+        a1.filter((a1Value) => a1Value === num).length ===
+          a2.filter((a2Value) => a2Value === sqNum).length
+      );
     });
-  })
+  });
 
   return check.every((boolCheck: Boolean) => boolCheck === true);
 }
@@ -433,7 +452,6 @@ export function comp(a1: number[] | null, a2: number[] | null): boolean {
 // b = [4, 9, 9]
 // console.log(comp(a, b)); // expected false
 
-
 /****************************************/
 /*
 https://www.codewars.com/kata/513e08acc600c94f01000001/train/typescript
@@ -448,8 +466,14 @@ The following are examples of expected output values:
 */
 
 export function rgb(r: number, g: number, b: number): string {
-  const rgbSanitazed = [r, g, b].map(v => v < 0 ? v = 0 : v).map(v => v > 255 ? v = 255 : v);
-  return rgbSanitazed.map(v => v.toString(16)).map(vs => Number(vs) < 10 ? '0' + vs : vs).join('').toUpperCase();
+  const rgbSanitazed = [r, g, b]
+    .map((v) => (v < 0 ? (v = 0) : v))
+    .map((v) => (v > 255 ? (v = 255) : v));
+  return rgbSanitazed
+    .map((v) => v.toString(16))
+    .map((vs) => (Number(vs) < 10 ? "0" + vs : vs))
+    .join("")
+    .toUpperCase();
 }
 
 // console.log('rgb(255, 255, 255)', rgb(255, 255, 255)) // returns FFFFFF
@@ -459,30 +483,37 @@ export function rgb(r: number, g: number, b: number): string {
 /****************************************/
 /**
  * According to Wikipedia, ROT13 is frequently used to obfuscate jokes on USENET.
- * For this task you're only supposed to substitute characters. 
+ * For this task you're only supposed to substitute characters.
  * Not spaces, punctuation, numbers, etc.
  * http://en.wikipedia.org/wiki/ROT13
- * 
+ *
  * "EBG13 rknzcyr." -> "ROT13 example."
  * "This is my first ROT13 excercise!" -> "Guvf vf zl svefg EBG13 rkprepvfr!"
- * 
+ *
  */
 
 function rot13(input: string): string {
   const alphabetRegex = /[a-z]/i;
   const inputArray = Array.from(input);
-  const alphabet = Array.from({ length: 26 }, (_, i) => String.fromCharCode(97 + i));
+  const alphabet = Array.from({ length: 26 }, (_, i) =>
+    String.fromCharCode(97 + i),
+  );
 
   inputArray.forEach((letter: string, index: number) => {
     if (alphabetRegex.test(letter)) {
       const letterIndex = alphabet.indexOf(letter.toLocaleLowerCase());
-      const rotatedLetter = alphabet[(letterIndex+13) % 26]
-      inputArray.splice(index, 1, letter === letter.toUpperCase() ? rotatedLetter.toUpperCase() : rotatedLetter)
+      const rotatedLetter = alphabet[(letterIndex + 13) % 26];
+      inputArray.splice(
+        index,
+        1,
+        letter === letter.toUpperCase()
+          ? rotatedLetter.toUpperCase()
+          : rotatedLetter,
+      );
     }
-  })
-  return inputArray.join('');
+  });
+  return inputArray.join("");
 }
-
 
 // console.log(rot13('Esto es una prueba'))
 // console.log(rot13('Rfgb rf han cehron'))
@@ -494,5 +525,48 @@ export function rot13(str: string): string {
 }
 */
 
-
 /****************************************/
+/**
+ * https://www.codewars.com/kata/51fc3beb41ecc97ee20000c3/train/typescript
+ * The makeLooper() function takes a string (of non-zero length) as an argument.
+ * It returns a function. The function it returns will return successive characters of the string on successive invocations.
+ * It will start back at the beginning of the string once it reaches the end.
+ *
+ * */
+
+export function makeLooper(str: string): () => string {
+  class MyLoop {
+    readonly length: number;
+    private currentIndex: number;
+
+    constructor(private characters: string[]) {
+      this.length = characters.length;
+      this.currentIndex = 0;
+    }
+
+    public nextChar = (): string => {
+      const current = this.characters.at(this.currentIndex);
+      this.currentIndex = (this.currentIndex + 1) % this.length;
+      return current ?? "";
+    };
+  }
+  const myLoop = new MyLoop(Array.from(str));
+  return myLoop.nextChar;
+}
+
+// const test = makeLooper("abc");
+// console.log("abc 1 -:", test());
+// console.log("abc 2 -:", test());
+// console.log("abc 3 -:", test());
+// console.log("abc 4 -:", test());
+
+//TOP Solution
+/*
+export function makeLooper(str: string): () => string {
+  let index = -1
+  return ()=> {
+      index++
+      return str[index%str.length]
+  };
+}
+*/
