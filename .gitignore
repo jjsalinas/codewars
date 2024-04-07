@@ -1,0 +1,36 @@
+# Node.js related
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# TypeScript related
+*.js
+*.js.map
+
+# Python related
+__pycache__/
+*.pyc
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swn
+.DS_Store
+
+# OS generated files
+Thumbs.db
+.DS_Store
+
+# Logs
+logs
+*.log
+
+# Build files
+dist/
