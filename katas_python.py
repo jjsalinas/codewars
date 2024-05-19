@@ -57,76 +57,7 @@ Each calculation consist of exactly one operation and two numbers
 The most outer function represents the left operand, the most inner function represents the right operand
 Division should be integer division
 """
-
-# My solution
-"""
-def zero(op=None):
-    if op:
-        return op(0)
-    else:
-        return 0  
-def one(op=None): 
-    if op:
-        return op(1)
-    else:
-        return 1
-def two(op=None): 
-    if op:
-        return op(2)
-    else:
-        return 2
-def three(op=None):
-    if op:
-        return op(3)
-    else:
-        return 3
-def four(op=None): 
-    if op:
-        return op(4)
-    else:
-        return 4
-def five(op=None):
-    if op:
-        return op(5)
-    else:
-        return 5
-def six(op=None):
-    if op:
-        return op(6)
-    else:
-        return 6
-def seven(op=None):
-    if op:
-        return op(7)
-    else:
-        return 7
-def eight(op=None):
-    if op:
-        return op(8)
-    else:
-        return 8
-
-def nine(op=None):
-    if op:
-        return op(9)
-    else:
-        return 9
-
-
-def plus(value):
-    return lambda x: x + value
-
-def minus(value):
-    return lambda x: x - value
-
-def times(value):
-    return lambda x: x * value
-
-def divided_by(value):
-    return lambda x: int(x/value)
-"""
 ######################
-"""Another solution"""
 """
 id_ = lambda x: x
 number = lambda x: lambda f=id_: f(x)
@@ -658,23 +589,25 @@ import re
 
 
 def solve_runes(runes: str) -> int:
-    operations = ["+", "-", "*"]
+    operations = ["+", "*", "-"]
     operator_index = -1
     result_operator_index = runes.index("=")
     current_operation = None
     missing_digit = -1
     question_marks_pattern = r"^\?{2,}$"
+    begins_with_question_mark_pattern = r"^-?\?[0-9]+$"
 
-    
-    runes_to_find_op = runes
+    runes_to_find_op = runes[:]
     initial_negative_char = False
-    if runes[0] == '-':
+    if runes[0] == "-":
         initial_negative_char = True
         runes_to_find_op = runes[1:]
 
     for operator in operations:
-        if operator in runes_to_find_op:
+        if operator_index == -1 and operator in runes_to_find_op:
             operator_index = runes_to_find_op.index(operator)
+            if initial_negative_char == True:
+                operator_index += 1
             current_operation = operator
 
     first_value = runes[0:operator_index]
@@ -683,22 +616,20 @@ def solve_runes(runes: str) -> int:
 
     possible_digits = [digit for digit in range(0, 10) if not str(digit) in runes]
 
-    print('##############')
-    print('##############')
-    print('##############')
-    print('runes', runes)
-    print('runes_to_find_op', runes_to_find_op)
-    print('current_operation', current_operation)
-    print('first_value', first_value)
-    print('second_value', second_value)
-    print('result_value', result_value)
-
     for digit in possible_digits:
-        # Skip 0 as a value if any part in the runes is only questions marks (plural, >1)
+        # Skip 0 as a value if any value is only questions marks (plural, >1)
         if digit == 0 and (
             bool(re.match(question_marks_pattern, first_value))
             or bool(re.match(question_marks_pattern, second_value))
             or bool(re.match(question_marks_pattern, result_value))
+        ):
+            continue
+
+        # Skip 0 as a value if any value starts with ? (numbers can't start with 0)
+        if digit == 0 and (
+            bool(re.match(begins_with_question_mark_pattern, first_value))
+            or bool(re.match(begins_with_question_mark_pattern, second_value))
+            or bool(re.match(begins_with_question_mark_pattern, result_value))
         ):
             continue
 
@@ -723,6 +654,18 @@ def solve_runes(runes: str) -> int:
     return missing_digit
 
 
+# TOP solution
+# def solve_runes(runes):
+#     for d in sorted(set("0123456789") - set(runes)):
+#         toTest = runes.replace("?", d)
+#         if re.search(r"([^\d]|\b)0\d+", toTest):
+#             continue
+#         l, r = toTest.split("=")
+#         if eval(l) == eval(r):
+#             return int(d)
+#     return -1
+
+
 # solve_runes_inputs = [
 #     "1+1=?",
 #     "123*45?=5?088",
@@ -731,20 +674,13 @@ def solve_runes(runes: str) -> int:
 #     "??*??=302?",
 #     "?*11=??",
 #     "??*1=??",
+#     "-7715?5--484?00=-28?9?5",
+#     "2?2+-30791=-30?39",
+#     "-?56373--9216=-?47157",
+#     "3231+-?8177=-?4946",
+#     "?1+1=2",
+#     "1+?1=2",
+#     "1+1=?2",
 # ]
-solve_runes_inputs = [
-    # "123?45*?=?",
-    # "?*123?45=?",
-    # "123?45+?=123?45",
-    # "123?45-?=123?45",
-    "-7715?5--484?00=-28?9?5",
-]
-for solve_runes_input in solve_runes_inputs:
-    print(solve_runes_input, "--:", solve_runes(solve_runes_input))
-# print("?*11=??", "--:", solve_runes("?*11=??"))
-# print("??*1=??", "--:", solve_runes("??*1=??"))
-
-# '123?45*?=?' : -1 should equal 0
-# '?*123?45=?' : -1 should equal 0
-# '123?45+?=123?45' : -1 should equal 0
-# '123?45-?=123?45' : -1 should equal 0
+# for solve_runes_input in solve_runes_inputs:
+#     print(solve_runes_input, "--:", solve_runes(solve_runes_input))
